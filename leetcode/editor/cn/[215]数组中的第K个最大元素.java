@@ -31,7 +31,54 @@
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int findKthLargest(int[] nums, int k) {
+        k = nums.length - k;
+        return quickSort(nums, 0, nums.length - 1, k);
+    }
 
+    private int quickSort(int[] nums, int left, int right, int k) {
+        while (left <= right) {
+            int idx = partition(nums, left, right);
+            if (idx == k) {
+                return nums[k];
+            } if (idx > k) {
+                right = idx - 1;
+            } else {
+                left = idx + 1;
+            }
+        }
+        return nums[k];
+    }
+
+    private int partition(int[] nums, int left, int right) {
+        int pivot = findPivot(nums, left, right);
+        int i = left;
+        int j = right - 1;
+        while (i <= j) {
+            if (nums[i] >= pivot) {
+                swap(nums, i, j);
+                j--;
+            } else if (nums[j] < pivot) {
+                swap(nums, i, j);
+                i++;
+            } else {
+                i++;
+                j--;
+            }
+        }
+        swap(nums, right, i);
+        return i;
+    }
+
+    private int findPivot(int[] nums, int left, int right) {
+        int pivotIndex = left + (int)((right - left) * Math.random());
+        swap(nums, pivotIndex, right);
+        return nums[right];
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
